@@ -1,0 +1,6 @@
+[submodule "scorep_plugin_common"]
+	path = scorep_plugin_common
+	url = https://github.com/score-p/scorep_plugin_common.git
+[submodule "common"]
+	path = common
+	url = https://github.com/score-p/scorep_plugin_common.git

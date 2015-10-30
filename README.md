@@ -1,4 +1,4 @@
-#VampirTrace/Score-P perf Plugin Counter Component
+#Score-P/VampirTrace perf Plugin Counter Component
 
 ##Compilation and Installation
 
@@ -10,7 +10,7 @@ To compile this plugin, you need:
 
 * CMake
 
-* VampirTrace or Score-P
+* Score-P (or VampirTrace)
 
 * A recent Linux kernel (`2.6.32+`) with activated tracing and the kernel headers
 
@@ -24,10 +24,14 @@ To compile this plugin, you need:
 2. Invoke CMake
 
     Specify the VampirTrace and/or Score-P directory if it is not in the default path with
-    `-DVT_INC=<PATH>` respectivly `-DSCOREP_DIR=<PATH>`. The plugin will use alternatively the
-    environment variables `VT_DIR` and `SCOREP_DIR`, e.g.
+    `-DSCOREP_DIR=<PATH>` (respectivly `-DVT_INC=<PATH>`). The plugin will use alternatively the
+    environment variables `SCOREP_DIR` (respectivly `VT_DIR`), e.g.
 
-        cmake .. -DVT_DIR=/opt/vampirtrace -DSCOREP_DIR=/opt/scorep
+        cmake .. -DSCOREP_DIR=/opt/scorep
+
+    or (for VampirTrace)
+
+        cmake .. -DVT_DIR=/opt/vampirtrace
 
 3. Invoke make
 
@@ -53,13 +57,6 @@ Paranoid levels:
 
  *   2 - disallow kernel profiling for unpriv
 
-To add a kernel event counter to your trace, you have to specify the environment variable
-`VT_PLUGIN_CNTR_METRIC` respectivly `SCOREP_METRIC_PLUGINS`.
-
-`VT_PLUGIN_CNTR_METRIC`/`SCOREP_METRIC_PLUGINS` specifies the software events that shall be recorded
-when tracing an application. You can add metrics that are available on your system. These can be
-predefined or explicit. Each event consists of an event source and an event definition.
-
 Please check your `/sys/bus/event_source/devices/` folder for event sources, e.g.
 `/sys/bus/event_source/devices/uncore_imc_0/` is the integrated memory controller of NUMA node 0 on
 Intel Sandy Bridge EP or `/sys/bus/event_source/devices/power/` on some systems with RAPL
@@ -79,16 +76,35 @@ These events can be used additional to explicit ones. Examples are:
 
     "power/energy-cores" (memory controller cycles on sandy Bridge)
 
-Usage for both in VampirTrace
+###Score-P
 
-    export VT_PLUGIN_CNTR_METRICS="PerfCVT_uncore_imc_0/event=0xff,umask=0x00"
-    export VT_PLUGIN_CNTR_METRICS="PerfCVT_power/energy-cores"
-
-Usage for the latter in Score-P
+To use this plugin, you have to add it to the `SCOREP_METRIC_PLUGINS` environment variable.
+Afterwards you can add the events that shall be recorded to the `SCOREP_METRIC_PERFC_PLUGIN`
+variable, e.g.:
 
     export SCOREP_METRIC_PLUGINS="PerfC"
-    export SCOREP_METRICS_PERFC="uncore_imc_0/event=0xff,umask=0x00"
-    export SCOREP_METRICS_PERFC="power/energy-cores"
+    export SCOREP_METRIC_PERFC_PLUGIN="uncore_imc_0/event=0xff,umask=0x00"
+
+or
+
+    export SCOREP_METRIC_PERFC_PLUGIN="power/energy-cores"
+
+###VampirTrace
+
+To add a kernel event counter to your trace, you have to specify the environment variable
+`VT_PLUGIN_CNTR_METRIC`.
+
+`VT_PLUGIN_CNTR_METRIC` specifies the software events that shall be recorded
+when tracing an application. You can add metrics that are available on your system. These can be
+predefined or explicit. Each event consists of an event source and an event definition.
+
+E.g.:
+
+    export VT_PLUGIN_CNTR_METRICS="PerfCVT_uncore_imc_0/event=0xff,umask=0x00"
+
+or
+
+    export VT_PLUGIN_CNTR_METRICS="PerfCVT_power/energy-cores"
 
 ###If anything fails
 

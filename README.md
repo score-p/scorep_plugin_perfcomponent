@@ -23,8 +23,9 @@ To compile this plugin, you need:
 
 2. Invoke CMake
 
-    Specify the VampirTrace and/or Score-P directory if it is not in the default path with
-    `-DSCOREP_DIR=<PATH>` (respectivly `-DVT_INC=<PATH>`). The plugin will use alternatively the
+    Specify the Score-P directory if it is not in the default path with
+    `-DSCOREP_DIR=<PATH>` (or `-DVT_INC=<PATH>` for VampirTrace respectively). 
+    The plugin will use alternatively the
     environment variables `SCOREP_DIR` (respectivly `VT_DIR`), e.g.
 
         cmake .. -DSCOREP_DIR=/opt/scorep
@@ -43,8 +44,8 @@ To compile this plugin, you need:
 
 ##Usage
 
-Before using this, be sure that you are allowed to measure the counters. It might be the case, that
-you have to change your paranoid level in `/proc/sys/kernel/perf_event_paranoid`. It should be 0 or
+Before using this, be sure that you are allowed to measure the counters. For unprivileged users, it might be necessary to change
+the paranoid level in `/proc/sys/kernel/perf_event_paranoid`. It should be 0 or
 -1.
 
 Paranoid levels:
@@ -74,7 +75,7 @@ These events can be used additional to explicit ones. Examples are:
 
 * Predefined
 
-    "power/energy-cores" (memory controller cycles on sandy Bridge)
+    "power/energy-cores" (energy in Joules used to operate processor cores according to RAPL)
 
 ###Score-P
 

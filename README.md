@@ -24,7 +24,7 @@ To compile this plugin, you need:
 2. Invoke CMake
 
     Specify the Score-P directory if it is not in the default path with
-    `-DSCOREP_DIR=<PATH>` (or `-DVT_INC=<PATH>` for VampirTrace respectively). 
+    `-DSCOREP_DIR=<PATH>` (or `-DVT_INC=<PATH>` for VampirTrace respectively).
     The plugin will use alternatively the
     environment variables `SCOREP_DIR` (respectivly `VT_DIR`), e.g.
 
@@ -80,15 +80,15 @@ These events can be used additional to explicit ones. Examples are:
 ###Score-P
 
 To use this plugin, you have to add it to the `SCOREP_METRIC_PLUGINS` environment variable.
-Afterwards you can add the events that shall be recorded to the `SCOREP_METRIC_PERFC_PLUGIN`
+Afterwards you can add the events that shall be recorded to the `SCOREP_METRIC_PERFCOMPONENT_PLUGIN`
 variable, e.g.:
 
-    export SCOREP_METRIC_PLUGINS="PerfC"
-    export SCOREP_METRIC_PERFC_PLUGIN="uncore_imc_0/event=0xff,umask=0x00"
+    export SCOREP_METRIC_PLUGINS="perfcomponent_plugin"
+    export SCOREP_METRIC_PERFCOMPONENT_PLUGIN="uncore_imc_0/event=0xff,umask=0x00"
 
 or
 
-    export SCOREP_METRIC_PERFC_PLUGIN="power/energy-cores"
+    export SCOREP_METRIC_PERFCOMPONENT_PLUGIN="power/energy-cores"
 
 ###VampirTrace
 
@@ -101,11 +101,11 @@ predefined or explicit. Each event consists of an event source and an event defi
 
 E.g.:
 
-    export VT_PLUGIN_CNTR_METRICS="PerfCVT_uncore_imc_0/event=0xff,umask=0x00"
+    export VT_PLUGIN_CNTR_METRICS="perfcomponent_plugin_uncore_imc_0/event=0xff,umask=0x00"
 
 or
 
-    export VT_PLUGIN_CNTR_METRICS="PerfCVT_power/energy-cores"
+    export VT_PLUGIN_CNTR_METRICS="perfcomponent_plugin_power/energy-cores"
 
 ###If anything fails
 

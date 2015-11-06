@@ -1,32 +1,43 @@
 cmake_minimum_required(VERSION 2.8)
+project(perfcomponent_plugin)
 
-#set(CMAKE_C_COMPILER clang)
-#plugin source files
+option(BACKEND_SCOREP "Build plugin using scorep(ON) or vampirtrace(OFF)" ON)
+
+set(SCOREP_FOUND false)
+
 set(PLUGIN_SOURCE perfc.c)
+
+
+if(BACKEND_SCOREP)
+    include(common/FindVampirTrace.cmake)
+    if(SCOREP_FOUND)
+        include_directories(${SCOREP_INCLUDE_DIRS})
+        add_definitions("-DSCOREP")
+    else()
+        message("Score-P was not found, falling back to VampirTrace!")
+    endif()
+endif()
+
+
+if(NOT SCOREP_FOUND OR NOT BACKEND_SCOREP)
+    include(common/FindScorep.cmake)
+    if(VT_FOUND)
+        include_directories(${VT_INCLUDE_DIRS})
+        add_definitions("-DVT")
+    else()
+        message(SEND_ERROR "Found neither Score-P nor VampirTrace backend!")
+    endif()
+endif()
+
 
 #additional c flags
 set(CMAKE_C_FLAGS "-D_GNU_SOURCE -std=c11")
-
 #debugging c flags
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DHAVE_DEBUG -O0 -Wstrict-prototypes -Wall -Wundef -Wno-long-long -Wsign-compare -Wcomment -pedantic -finline-functions -fno-strict-aliasing")
+#release c flags
 set(CMAKE_C_FLAGS_RELEASE "-Os")
 
-include(common/FindVampirTrace.cmake)
-if(VT_FOUND)
-    add_library(PerfCVT SHARED ${PLUGIN_SOURCE})
-    set_target_properties(PerfCVT PROPERTIES COMPILE_DEFINITIONS VT)
-    set_target_properties(PerfCVT PROPERTIES INCLUDE_DIRECTORIES "${VT_INCLUDE_DIRS}")
-    target_link_libraries(PerfCVT pthread m)
-endif()
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCE})
+target_link_libraries(${PROJECT_NAME} pthread m)
 
-include(common/FindScorep.cmake)
-if(SCOREP_FOUND)
-    add_library(PerfC SHARED ${PLUGIN_SOURCE})
-    set_target_properties(PerfC PROPERTIES COMPILE_DEFINITIONS VT)
-    set_target_properties(PerfC PROPERTIES INCLUDE_DIRECTORIES "${SCOREP_INCLUDE_DIRS}")
-    target_link_libraries(PerfC pthread m)
-endif()
-    
-if(NOT SCOREP_FOUND AND NOT VT_FOUND)
-    message(FATAL_ERROR "Found neither ScoreP or VampirTrace backend!")
-endif()
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)

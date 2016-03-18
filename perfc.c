@@ -468,7 +468,7 @@ bool get_optional_value( int32_t   id,
 /**
  * This function get called to give some informations about the plugin to scorep
  */
-SCOREP_METRIC_PLUGIN_ENTRY( PerfC )
+SCOREP_METRIC_PLUGIN_ENTRY( perfcomponent_plugin )
 {
     char * env;
     /* Initialize info data (with zero) */
@@ -487,7 +487,7 @@ SCOREP_METRIC_PLUGIN_ENTRY( PerfC )
     info.get_optional_value           = get_optional_value;
 
     /* non-default execution settings */
-    env = getenv("SCOREP_METRIC_PERFC_HOST");
+    env = getenv("SCOREP_METRIC_PERFCOMPONENT_HOST");
     if (env){
       if (! strcmp(env, "TRUE") ||
           ! strcmp(env, "True") ||
@@ -495,13 +495,13 @@ SCOREP_METRIC_PLUGIN_ENTRY( PerfC )
           ! strcmp(env, "1"))
         info.run_per = SCOREP_METRIC_PER_HOST;
     }
-    env = getenv("SCOREP_METRIC_PERFC_ASYNC");
+    env = getenv("SCOREP_METRIC_PERFCOMPONENT_ASYNC");
     if (env){
       if (! strcmp(env, "TRUE") ||
           ! strcmp(env, "True") ||
           ! strcmp(env, "true") ||
           ! strcmp(env, "1"))
-        fprintf(stderr,"Asynchronous support for PerfC plugin not supported yet\n");
+        fprintf(stderr,"Asynchronous support for Perf Component plugin not supported yet.\n");
     }
 
     return info;

@@ -1,8 +1,8 @@
-#Score-P/VampirTrace perf Plugin Counter Component
+# Score-P/VampirTrace perf Plugin Counter Component
 
-##Compilation and Installation
+## Compilation and Installation
 
-###Prerequisites
+### Prerequisites
 
 To compile this plugin, you need:
 
@@ -14,7 +14,7 @@ To compile this plugin, you need:
 
 * A recent Linux kernel (`2.6.32+`) with activated tracing and the kernel headers
 
-###Building
+### Building
 
 1. Create a build directory
 
@@ -26,7 +26,7 @@ To compile this plugin, you need:
     Specify the Score-P directory if it is not in the default path with
     `-DSCOREP_DIR=<PATH>` (or `-DVT_INC=<PATH>` for VampirTrace respectively).
     The plugin will use alternatively the
-    environment variables `SCOREP_DIR` (respectivly `VT_DIR`), e.g.
+    environment variables `SCOREP_DIR` (respectively `VT_DIR`), e.g.
 
         cmake .. -DSCOREP_DIR=/opt/scorep
 
@@ -42,7 +42,7 @@ To compile this plugin, you need:
 
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 
-##Usage
+## Usage
 
 Before using this, be sure that you are allowed to measure the counters. For unprivileged users, it might be necessary to change
 the paranoid level in `/proc/sys/kernel/perf_event_paranoid`. It should be 0 or
@@ -77,7 +77,7 @@ These events can be used additional to explicit ones. Examples are:
 
     "power/energy-cores" (energy in Joules used to operate processor cores according to RAPL)
 
-###Score-P
+### Score-P
 
 To use this plugin, you have to add it to the `SCOREP_METRIC_PLUGINS` environment variable.
 Afterwards you can add the events that shall be recorded to the `SCOREP_METRIC_PERFCOMPONENT_PLUGIN`
@@ -90,7 +90,7 @@ or
 
     export SCOREP_METRIC_PERFCOMPONENT_PLUGIN="power/energy-cores"
 
-###VampirTrace
+### VampirTrace
 
 To add a kernel event counter to your trace, you have to specify the environment variable
 `VT_PLUGIN_CNTR_METRIC`.
@@ -107,7 +107,7 @@ or
 
     export VT_PLUGIN_CNTR_METRICS="perfcomponent_plugin_power/energy-cores"
 
-###If anything fails
+### If anything fails
 
 1. Check whether the plugin library can be loaded from the `LD_LIBRARY_PATH`.
 
@@ -115,6 +115,6 @@ or
 
 3. Write a mail to the author.
 
-##Author
+## Author
 
 * Robert Schoene (robert.schoene at tu-dresden dot de)

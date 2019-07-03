@@ -84,11 +84,14 @@ Afterwards you can add the events that shall be recorded to the `SCOREP_METRIC_P
 variable, e.g.:
 
     export SCOREP_METRIC_PLUGINS="perfcomponent_plugin"
+    export SCOREP_METRIC_PLUGINS_SEP=";"
     export SCOREP_METRIC_PERFCOMPONENT_PLUGIN="uncore_imc_0/event=0xff,umask=0x00"
 
 or
 
     export SCOREP_METRIC_PERFCOMPONENT_PLUGIN="power/energy-cores"
+
+In the first case, it is required to change the metric seperator because the default is "," and will lead to a wrong interpretation.
 
 ### VampirTrace
 

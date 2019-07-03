@@ -9,7 +9,7 @@ set(PLUGIN_SOURCE perfc.c)
 
 
 if(BACKEND_SCOREP)
-    include(common/FindVampirTrace.cmake)
+    include(common/FindScorep.cmake)
     if(SCOREP_FOUND)
         include_directories(${SCOREP_INCLUDE_DIRS})
         add_definitions("-DSCOREP")
@@ -20,7 +20,7 @@ endif()
 
 
 if(NOT SCOREP_FOUND OR NOT BACKEND_SCOREP)
-    include(common/FindScorep.cmake)
+    include(common/FindVampirTrace.cmake)
     if(VT_FOUND)
         include_directories(${VT_INCLUDE_DIRS})
         add_definitions("-DVT")

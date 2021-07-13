@@ -81,7 +81,7 @@ static void inline write_at_position(uint64_t * config, int start, unsigned long
  * It provides the unit and a scale for this attr
  * If the event has not been found, returns ! 0
  * */
-int build_perf_attr(struct perf_event_attr * attr, char * name, char * unit, double * scale){
+int build_perf_attr(struct perf_event_attr * attr, const char * name, const char * unit, double * scale){
   int                i, j, k, nr_definitions;
   FILE * fd;
   char tmp[256],reading[256];
@@ -99,10 +99,10 @@ int build_perf_attr(struct perf_event_attr * attr, char * name, char * unit, dou
   attr->config1 = 0;
   attr->type    = 0;
   /* first part of the name is e.g. power, then comes the event */
-  position = strstr(name,"/");
+  position = strchr(name,'/');
   if (!position){
     /* malformed event */
-    fprintf(stderr, "The event %s is malformed, it should be <event_source>/<event>",name);
+    fprintf(stderr, "The event %s is malformed, it should be <event_source>/<event>\n",name);
     return 1;
   }
   /* end the event source string for the first strncpy */
@@ -319,26 +319,33 @@ int32_t add_counter(char * event_name){
     return -1;
   }
 
+  pthread_mutex_lock(&event_lock);
   ret = build_perf_attr(&attr, event_name ,unit , &scale);
   /* wrong metric */
   if (ret){
     fprintf(stderr, "PERF metric not recognized: %s", event_name );
+    pthread_mutex_unlock(&event_lock);
     return -1;
   }
+  pthread_mutex_unlock(&event_lock);
+  
   fd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, 0);
   if (fd<=0){
     fprintf(stderr, "Unable to open counter \"%s\". Aborting.\n",event_name);
     return -1;
   }
+  
   pthread_mutex_lock(&event_lock);
   if (num_events == 4096){
     fprintf(stderr, "PerfC Plugin does only support 4096 metrics per process\n");
     close(fd);
+    pthread_mutex_unlock(&event_lock);
     return -1;
   }
   ret=num_events;
   num_events++;
   pthread_mutex_unlock(&event_lock);
+  
   events[ret].fd=fd;
   events[ret].scale=scale;
   return ret;

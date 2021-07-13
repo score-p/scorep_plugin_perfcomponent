@@ -93,6 +93,12 @@ or
 
 In the first case, it is required to change the metric seperator because the default is "," and will lead to a wrong interpretation.
 
+#### Other Environment Variables:
+
+* `SCOREP_METRIC_PERFCOMPONENT_DELTA_TIME=(integer)` sets the maximal interval in which the single metrics are retrieved. By default, they are retrieved for every event. With this environment variable they will only be retrieved every `(integer)` clock ticks (depending on the used `SCOREP_TIMER`). This only works with **rofiling disabled**.
+
+* `SCOREP_METRIC_PERFCOMPONENT_HOST=(boolean)` if set to `TRUE/True/true/1`, the metrics will be read only per host, not per thread. This only works with **profiling disabled**.
+
 ### VampirTrace
 
 To add a kernel event counter to your trace, you have to specify the environment variable

@@ -502,6 +502,13 @@ SCOREP_METRIC_PLUGIN_ENTRY( perfcomponent_plugin )
           ! strcmp(env, "1"))
         info.run_per = SCOREP_METRIC_PER_HOST;
     }
+    
+    /* non-default execution settings */
+    env = getenv("SCOREP_METRIC_PERFCOMPONENT_DELTA_TIME");
+    if (env){
+      info.delta_t=atoll(env);
+    }
+    
     env = getenv("SCOREP_METRIC_PERFCOMPONENT_ASYNC");
     if (env){
       if (! strcmp(env, "TRUE") ||

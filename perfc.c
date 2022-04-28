@@ -227,8 +227,8 @@ int build_perf_attr(struct perf_event_attr * attr, const char * name, const char
     }
     /* this should be config-type:mask */
     /* the typical line says config:0-7 */
-    i=fscanf(fd,"%s", tmp);
-    if ( i < 0 ){
+    int check = fscanf(fd,"%s", tmp);
+    if ( check < 0 ){
       fprintf(stderr, "Error while reading file /sys/bus/event_source/devices/%s/format/%s",event_source_name,definitions[i]);
       return -1;
     }
